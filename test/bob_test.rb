@@ -1,5 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/pride'
+require 'mocha/minitest'
+require 'pry'
 require './lib/bob'
 
 class BobTest < Minitest::Test
@@ -14,10 +16,9 @@ class BobTest < Minitest::Test
   end
 
   def test_it_can_have_paint
-    skip
     bob = Bob.new
-    paint_1 = Paint.new("Alizarin Crimson")
-    paint_2 = Paint.new("Van Dyke Brown")
+    paint_1 = mock("Alizarin Crimson")
+    paint_2 = mock("Van Dyke Brown")
 
     bob.add_paint(paint_1)
     bob.add_paint(paint_2)
@@ -26,10 +27,10 @@ class BobTest < Minitest::Test
   end
 
   def test_it_can_return_colors
-    skip
     bob = Bob.new
-    paint_1 = Paint.new("Alizarin Crimson")
-    paint_2 = Paint.new("Van Dyke Brown")
+    paint_1 = mock("Alizarin Crimson")
+    paint_1.stubs(:name).returns("Alizarin Crimson")
+    paint_2 = stub(name: "Van Dyke Brown")
     bob.add_paint(paint_1)
     bob.add_paint(paint_2)
 
@@ -37,15 +38,14 @@ class BobTest < Minitest::Test
   end
 
   def test_it_can_total_paint_amount
-    skip
     bob = Bob.new
-    paint_1 = Paint.new("Alizarin Crimson", 42)
-    paint_2 = Paint.new("Van Dyke Brown", 25)
+
+    paint_1 = stub(name: "Alizarin Crimson", amount: 42)
+    paint_2 = stub(name: "Van Dyke Brown", amount: 25)
 
     bob.add_paint(paint_1)
     bob.add_paint(paint_2)
 
     assert_equal 67, bob.total_paint_amount
   end
-
 end
